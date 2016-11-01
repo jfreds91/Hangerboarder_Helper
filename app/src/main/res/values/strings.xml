@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Hangerboarder_Helper</string>
+    <string name="new_workout">Created Workout</string>
+    <string name="exercise_1">exercise_1</string>
+    <string name="exercise_2">exercise_2</string>
+    <string name="exercise_3">exercise_3</string>
+    <string name="exercise_4">exercise_4</string>
+
+    <string name="button_add_new_text">Add new</string>
+    <string name="button_delete_row_description">Delete</string>
+    <string-array name="categories">
+        <item >HOME</item>
+        <item >WORK</item>
+        <item >MOBILE</item>
+        <item >OTHER</item>
+    </string-array>
+</resources>

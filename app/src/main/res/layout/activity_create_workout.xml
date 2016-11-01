@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_workout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.jesse.hangerboarder_helper.CreateWorkoutActivity">
+    <TableRow>
+        <TextView
+            android:text="Enter your workout and ex names :D"
+            android:padding="3dip"
+            android:layout_span = "2"
+            android:id="@+id/helpful_hint"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="Workout name"
+            android:padding="3dip"/>
+        <EditText
+            android:hint="Enter workout name"
+            android:padding="3dip"
+            android:gravity="right"
+            android:id="@+id/new_workout"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="Exercise 1 name"
+            android:padding="3dip"/>
+        <EditText
+            android:hint="Enter exercise name"
+            android:padding="3dip"
+            android:gravity="right"
+            android:id="@+id/exercise_1"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="Exercise 2 name"
+            android:padding="3dip"/>
+        <EditText
+            android:hint="Enter exercise name"
+            android:padding="3dip"
+            android:gravity="right"
+            android:id="@+id/exercise_2"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="Exercise 3 name"
+            android:padding="3dip"/>
+        <EditText
+            android:hint="Enter exercise name"
+            android:padding="3dip"
+            android:gravity="right"
+            android:id="@+id/exercise_3"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="Exercise 4 name"
+            android:padding="3dip"/>
+        <EditText
+            android:hint="Enter exercise name"
+            android:padding="3dip"
+            android:gravity="right"
+            android:id="@+id/exercise_4"/>
+    </TableRow>
+    <TableRow>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save and Return"
+            android:layout_span="2"
+            android:id="@+id/createWorkoutButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </TableRow>
+</TableLayout>
