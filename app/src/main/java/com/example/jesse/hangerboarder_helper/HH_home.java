@@ -1,11 +1,15 @@
 package com.example.jesse.hangerboarder_helper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,7 +19,9 @@ public class HH_home extends AppCompatActivity {
     public final static String SER_KEY = "com.example.HangerBoarderHelper.ser";
     static final int NEW_WORKOUT_REQUEST = 1;  // The request code
     public final static String EXTRA_MESSAGE = "com.example.Hangerboarder_Helper.MESSAGE";
+
     Button btngenerate, btntest, btnaddworkout;
+    public LinearLayout mScrollLinearView;
     TextView tvtitle;
     ArrayList<Workout_obj> allworkouts = new ArrayList<>();
 
@@ -28,7 +34,7 @@ public class HH_home extends AppCompatActivity {
         btntest = (Button) findViewById(R.id.testButton);
         btnaddworkout = (Button) findViewById(R.id.add_workout);
         tvtitle = (TextView) findViewById(R.id.mainTitle);
-
+        mScrollLinearView = (LinearLayout) findViewById(R.id.scrollLinearView);
 
 
         //set click listener which sends you to CreateWorkoutActivity
@@ -74,6 +80,8 @@ public class HH_home extends AppCompatActivity {
         //assign click listener to button
         btngenerate.setOnClickListener(oclBtnGenerate);
 
+        //add any existing workouts
+        //TODO: call showWorkout(allworkouts)
     }
 
     //this is called if after the user returns from CreateWorkoutActivity
@@ -84,6 +92,7 @@ public class HH_home extends AppCompatActivity {
                 //add returned workout to workouts list allworkouts
                 Workout_obj createdWorkout = (Workout_obj) data.getSerializableExtra(SER_KEY);
                 allworkouts.add(createdWorkout);
+                showWorkout(createdWorkout);
             }
             if (resultCode == RESULT_CANCELED) {
                 tvtitle.setText("RESULT_CANCELED");
@@ -109,6 +118,16 @@ public class HH_home extends AppCompatActivity {
 
         startActivity(intent);
     }
+
+    public void showWorkout(Workout_obj showWorkout){
+        //this handles the case where we just pass 1 workout to the main view it should:
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View buttHolderView = inflater.inflate(R.layout.workoutbutt, mScrollLinearView, false);
+        final Button btn = (Button) buttHolderView.findViewById(R.id.workoutButtButt);
+        ((ViewGroup) btn.getParent()).removeView(btn);
+        btn.setText(showWorkout.getName());
+        mScrollLinearView.addView(btn);//, mScrollLinearView.getChildCount()-1);
+    };
 
 
 

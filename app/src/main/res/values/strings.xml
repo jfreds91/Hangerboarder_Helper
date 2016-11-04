@@ -8,6 +8,9 @@
 
     <string name="button_add_new_text">Add new</string>
     <string name="button_delete_row_description">Delete</string>
+    <string name="TestButtonName">test</string>
+    <string name="generateWorkoutName">generate workout</string>
+    <string name="addWorkoutName">Add Workout</string>
     <string-array name="categories">
         <item >HOME</item>
         <item >WORK</item>

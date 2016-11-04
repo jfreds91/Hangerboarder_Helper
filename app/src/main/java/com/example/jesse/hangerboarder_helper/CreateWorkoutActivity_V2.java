@@ -86,7 +86,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
     private void inflateEditRow(String name) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.row, mContainerView, false); //instead of "null", could be "parent, false"
+        final View rowView = inflater.inflate(R.layout.row, mContainerView, false);
         final ImageButton deleteButton = (ImageButton) rowView.findViewById(R.id.buttonDelete);
         final EditText editText = (EditText) rowView.findViewById(R.id.editText);
 
