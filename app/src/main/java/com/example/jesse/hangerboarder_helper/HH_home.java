@@ -1,5 +1,6 @@
 package com.example.jesse.hangerboarder_helper;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -129,6 +130,14 @@ public class HH_home extends AppCompatActivity {
         mScrollLinearView.addView(btn);//, mScrollLinearView.getChildCount()-1);
     };
 
+    public void onWorkoutButtClick(View v) {
+        //This is called when a workout button is clicked
+        //needs to find a way to pass its index to the dialog
+        int viewIndex = mScrollLinearView.indexOfChild(v);
+        String s = allworkouts.get(viewIndex).getName();
+        DialogFragment newFragment = PreRunMenuFragment.newInstance(s);
+        newFragment.show(getFragmentManager(), "prerun");
+    }
 
 
 }

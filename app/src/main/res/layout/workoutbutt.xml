@@ -8,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="300dp"
-        android:text="N/A" />
+        android:text="N/A"
+        android:onClick="onWorkoutButtClick"/>
 
 </LinearLayout>
