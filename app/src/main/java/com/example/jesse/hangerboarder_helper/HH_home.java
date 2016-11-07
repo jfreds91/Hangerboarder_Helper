@@ -16,9 +16,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class HH_home extends AppCompatActivity {
+public class HH_home extends AppCompatActivity
+                     implements PreRunMenuFragment.NoticeDialogListener{
+
     public final static String SER_KEY = "com.example.HangerBoarderHelper.ser";
+    public final static String EX_KEY = "com.example.HangerBoarderHelper.exkey";
     static final int NEW_WORKOUT_REQUEST = 1;  // The request code
+    static final int RUN_WORKOUT = 2; //Request code
     public final static String EXTRA_MESSAGE = "com.example.Hangerboarder_Helper.MESSAGE";
 
     Button btngenerate, btntest, btnaddworkout;
@@ -85,8 +89,9 @@ public class HH_home extends AppCompatActivity {
         //TODO: call showWorkout(allworkouts)
     }
 
-    //this is called if after the user returns from CreateWorkoutActivity
+    //this is called if after the user returns from an activity for a result
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //WORKOUT CREATION
         if (requestCode == NEW_WORKOUT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 tvtitle.setText("RESULT_OK");
@@ -99,16 +104,19 @@ public class HH_home extends AppCompatActivity {
                 tvtitle.setText("RESULT_CANCELED");
             }
         }
+
+        //RUNNING WORKOUT
+        if (requestCode == RUN_WORKOUT) {
+            if (resultCode == RESULT_OK) {
+                tvtitle.setText("Run RESULT_OK");
+                //TODO: update workout with new weights etc
+            }
+        }
     }
 
     /** Called when the user clicks the Test button */
     public void runTest(View view) {
-        // Do something in response to button
         Intent intent = new Intent(this, TestResultsActivity.class);
-
-        //check to see if workout exists
-        //String message = (allworkouts.getFirst() == null) ? "workout not defined" : allworkouts.getFirst().extoString();
-
         String message = "No workouts defined";
         try {
             message = allworkouts.get(allworkouts.size() - 1).extoString();
@@ -116,7 +124,6 @@ public class HH_home extends AppCompatActivity {
         catch(IndexOutOfBoundsException ioobe) {}
 
         intent.putExtra(EXTRA_MESSAGE, message);
-
         startActivity(intent);
     }
 
@@ -135,10 +142,38 @@ public class HH_home extends AppCompatActivity {
         //needs to find a way to pass its index to the dialog
         int viewIndex = mScrollLinearView.indexOfChild(v);
         String s = allworkouts.get(viewIndex).getName();
-        DialogFragment newFragment = PreRunMenuFragment.newInstance(s);
+        DialogFragment newFragment = PreRunMenuFragment.newInstance(s, viewIndex);
         newFragment.show(getFragmentManager(), "prerun");
     }
 
+
+    //The dialog fragment receives a reference to this Activity through the
+    //Fragment.onAttach() callback, which it used to call the following methods
+    //defined by the PreRunMenuFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int viewIndex) {
+        //User touched RUN
+        String s = Integer.toString(viewIndex);
+        tvtitle.setText("DialogPositiveClick " + s);
+        Workout_obj activeWorkout = allworkouts.get(viewIndex);
+
+        Intent intent = new Intent(this, RunWorkoutActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SER_KEY, activeWorkout);
+        intent.putExtras(bundle);
+        //intent.putExtra(EX_KEY, 0); //This should be used to tell the activity to run the first exercise MAY NOT BE NEEDED
+        startActivityForResult(intent, RUN_WORKOUT); //RUN_WORKOUT is the for-result key
+    }
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        //User touched RETURN
+        tvtitle.setText("DialogNegativeClick");
+    }
+    @Override
+    public void onDialogNeutralClick(DialogFragment dialog, int viewIndex) {
+        //User touched RUN
+        tvtitle.setText("DialogNeutralClick");
+    }
 
 }
 

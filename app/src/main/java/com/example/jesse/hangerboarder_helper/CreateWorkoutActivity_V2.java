@@ -175,7 +175,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
                 EditText e = (EditText) child.getChildAt(0);
                 if (!e.getText().toString().equals("")) {
                     exnum++;
-                    if (exnum >= 1) {
+                    if (exnum > 1) {
                         tempEx = new Exercise_obj(e.getText().toString());
                         newWorkout.add(tempEx);
                     }
@@ -188,7 +188,6 @@ public class CreateWorkoutActivity_V2 extends Activity{
         bundle.putSerializable(SER_KEY, newWorkout);
         returnIntent.putExtras(bundle);
         setResult(Activity.RESULT_OK,returnIntent);
-        //startActivity(returnIntent);
         finish();
     }
 

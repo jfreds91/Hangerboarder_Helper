@@ -21,6 +21,7 @@
         <activity android:name=".TestResultsActivity" />
         <activity android:name=".CreateWorkoutActivity"></activity>
         <activity android:name=".CreateWorkoutActivity_V2"></activity>
+        <activity android:name=".RunWorkoutActivity"></activity>
     </application>
 
 </manifest>

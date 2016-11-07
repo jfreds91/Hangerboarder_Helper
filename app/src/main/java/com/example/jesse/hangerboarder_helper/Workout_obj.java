@@ -16,6 +16,11 @@ public class Workout_obj implements Serializable {//extends ArrayList<Exercise_o
         this.setName(name);
     }
 
+    public int size(){
+        int i = exlist.size();
+        return i;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
