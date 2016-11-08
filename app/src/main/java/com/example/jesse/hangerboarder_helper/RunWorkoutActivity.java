@@ -59,13 +59,13 @@ public class RunWorkoutActivity extends Activity {
 
         //get serialized content
         Intent intent = this.getIntent();
-        Workout_obj activeWorkout = (Workout_obj) intent.getSerializableExtra(SER_KEY);
+        final Workout_obj activeWorkout = (Workout_obj) intent.getSerializableExtra(SER_KEY);
         activeExNum = intent.getIntExtra(EX_KEY, 0);
-        int totalEx = activeWorkout.size();
+        final int totalEx = activeWorkout.size();
         String totalExS = Integer.toString(totalEx);
         String thisExS = Integer.toString(activeExNum + 1);
         runWorkoutTitle = (TextView) findViewById(R.id.runWorkoutTitle);
-        runWorkoutTitle.setText("Exercise " + thisExS + "/" +totalExS);
+        runWorkoutTitle.setText("Exercise " + activeWorkout.get(activeExNum).getName() + ", " + thisExS + "/" +totalExS);
 
         timerTextView = (TextView) findViewById(R.id.runWorkoutTimerText);
         int minutes = (int) (maxTime/1000) /60;
@@ -95,7 +95,12 @@ public class RunWorkoutActivity extends Activity {
         proceedButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                //The proceed button returns to the HH_home activity with the specified workout and active (now completed) ex index
                 Intent proceedIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(SER_KEY, activeWorkout);
+                proceedIntent.putExtras(bundle);
+                proceedIntent.putExtra(EX_KEY, activeExNum); //this is the index number of the exercise which was just run
                 setResult(Activity.RESULT_OK,proceedIntent);
                 timerHandler.removeCallbacks(timerRunnable);
                 finish();

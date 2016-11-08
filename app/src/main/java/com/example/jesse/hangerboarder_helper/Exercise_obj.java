@@ -14,6 +14,7 @@ public class Exercise_obj implements Serializable { //extends ArrayList {
     public Exercise_obj(String name){
         super();
         this.setName(name);
+        exweights.add(0); //when an exercise is initialized, it will start with a weight of 0
     }
 
     public void setName(String name) {

@@ -109,6 +109,27 @@ public class HH_home extends AppCompatActivity
         if (requestCode == RUN_WORKOUT) {
             if (resultCode == RESULT_OK) {
                 tvtitle.setText("Run RESULT_OK");
+                //Check if there is another exercise
+                Workout_obj runningWorkout = (Workout_obj) data.getSerializableExtra(SER_KEY);
+                int runningExNum = data.getIntExtra(EX_KEY, -1);
+                    if (runningExNum == -1) {
+                        tvtitle.setText("RunWorkoutActivity did not return an exNum");
+                    } else {
+                        runningExNum++;
+                        try {
+                            Exercise_obj testEx =  runningWorkout.get(runningExNum);
+
+                            Intent intent = new Intent(this, RunWorkoutActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(SER_KEY, runningWorkout);
+                            intent.putExtras(bundle);
+                            intent.putExtra(EX_KEY, runningExNum);
+                            startActivityForResult(intent, RUN_WORKOUT); //RUN_WORKOUT is the for-result key
+                        } catch(IndexOutOfBoundsException ioobe) {
+                            tvtitle.setText("Workout Complete!!!");
+                        }
+                    }
+                //increment exercise index, and call RunWorkoutActivity again
                 //TODO: update workout with new weights etc
             }
         }
