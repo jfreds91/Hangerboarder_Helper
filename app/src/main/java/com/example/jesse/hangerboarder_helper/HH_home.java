@@ -21,6 +21,7 @@ public class HH_home extends AppCompatActivity
 
     public final static String SER_KEY = "com.example.HangerBoarderHelper.ser";
     public final static String EX_KEY = "com.example.HangerBoarderHelper.exkey";
+    public final static String WO_KEY = "com.example.HangerBoarderHelper.wokey";
     static final int NEW_WORKOUT_REQUEST = 1;  // The request code
     static final int RUN_WORKOUT = 2; //Request code
     public final static String EXTRA_MESSAGE = "com.example.Hangerboarder_Helper.MESSAGE";
@@ -72,9 +73,9 @@ public class HH_home extends AppCompatActivity
                 Exercise_obj bexercise = new Exercise_obj("exercise_b");
                 Exercise_obj cexercise = new Exercise_obj("exercise_c");
 
-                aexercise.add(1);
-                aexercise.add(2);
-                aexercise.add(3);
+                aexercise.add(new Double(1));
+                aexercise.add(new Double(2));
+                aexercise.add(new Double(3));
 
                 allworkouts.add(nworkout);
                 nworkout.add(aexercise);
@@ -111,13 +112,16 @@ public class HH_home extends AppCompatActivity
                 tvtitle.setText("Run RESULT_OK");
                 //Check if there is another exercise
                 Workout_obj runningWorkout = (Workout_obj) data.getSerializableExtra(SER_KEY);
+                int runningWoNum = data.getIntExtra(WO_KEY, -1);
                 int runningExNum = data.getIntExtra(EX_KEY, -1);
                     if (runningExNum == -1) {
-                        tvtitle.setText("RunWorkoutActivity did not return an exNum");
+                        tvtitle.setText("RunWorkoutActivity did not return EX_KEY");
+                    } else if (runningWoNum == -1) {
+                        tvtitle.setText("RunWorkoutActivity did not return WO_KEY");
                     } else {
                         runningExNum++;
                         try {
-                            Exercise_obj testEx =  runningWorkout.get(runningExNum);
+                            Exercise_obj testEx =  runningWorkout.get(runningExNum); //This is just to make sure that there is another exercise left
 
                             Intent intent = new Intent(this, RunWorkoutActivity.class);
                             Bundle bundle = new Bundle();
@@ -127,10 +131,9 @@ public class HH_home extends AppCompatActivity
                             startActivityForResult(intent, RUN_WORKOUT); //RUN_WORKOUT is the for-result key
                         } catch(IndexOutOfBoundsException ioobe) {
                             tvtitle.setText("Workout Complete!!!");
+                            allworkouts.set(runningWoNum, runningWorkout);
                         }
                     }
-                //increment exercise index, and call RunWorkoutActivity again
-                //TODO: update workout with new weights etc
             }
         }
     }
@@ -182,6 +185,7 @@ public class HH_home extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putSerializable(SER_KEY, activeWorkout);
         intent.putExtras(bundle);
+        intent.putExtra(WO_KEY,viewIndex);
         //intent.putExtra(EX_KEY, 0); //This should be used to tell the activity to run the first exercise MAY NOT BE NEEDED
         startActivityForResult(intent, RUN_WORKOUT); //RUN_WORKOUT is the for-result key
     }

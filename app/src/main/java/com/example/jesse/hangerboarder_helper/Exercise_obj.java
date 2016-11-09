@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class Exercise_obj implements Serializable { //extends ArrayList {
     private String name;
-    private ArrayList<Integer> exweights = new ArrayList<>();
+    private ArrayList<Double> exweights = new ArrayList<>();
 
     public Exercise_obj(String name){
         super();
         this.setName(name);
-        exweights.add(0); //when an exercise is initialized, it will start with a weight of 0
+        exweights.add(new Double(0)); //when an exercise is initialized, it will start with a weight of 0
     }
 
     public void setName(String name) {
@@ -25,8 +25,10 @@ public class Exercise_obj implements Serializable { //extends ArrayList {
         return this.name;
     }
 
-    public void add(Integer weight) {
+    public void add(Double weight) {
         this.exweights.add(weight);
     }
+
+    public Double getLast() { return this.exweights.get(this.exweights.size() - 1); }
 
 }

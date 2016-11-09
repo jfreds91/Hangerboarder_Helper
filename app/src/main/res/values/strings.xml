@@ -12,10 +12,10 @@
     <string name="generateWorkoutName">generate workout</string>
     <string name="addWorkoutName">Add Workout</string>
     <string-array name="categories">
-        <item >HOME</item>
-        <item >WORK</item>
-        <item >MOBILE</item>
-        <item >OTHER</item>
+        <item >7/3 Repeater</item>
+        <item >5/5 Repeater</item>
+        <item >Max Hang</item>
+        <item >Other</item>
     </string-array>
     <string-array name="PreRunOptions">
         <item >RUN</item>
