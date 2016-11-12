@@ -24,6 +24,7 @@ public class HH_home extends AppCompatActivity
     public final static String WO_KEY = "com.example.HangerBoarderHelper.wokey";
     static final int NEW_WORKOUT_REQUEST = 1;  // The request code
     static final int RUN_WORKOUT = 2; //Request code
+    static final int EDIT_WORKOUT = 3; //Request code
     public final static String EXTRA_MESSAGE = "com.example.Hangerboarder_Helper.MESSAGE";
 
     Button btngenerate, btntest, btnaddworkout;
@@ -103,6 +104,22 @@ public class HH_home extends AppCompatActivity
             }
             if (resultCode == RESULT_CANCELED) {
                 tvtitle.setText("RESULT_CANCELED");
+            }
+        }
+
+        //WORKOUT EDITED
+        if (requestCode == EDIT_WORKOUT) {
+            if (resultCode == RESULT_OK) {
+                tvtitle.setText("Workout successfully edited");
+                Workout_obj editedWorkout = (Workout_obj) data.getSerializableExtra(SER_KEY);
+                int viewIndex = data.getIntExtra(WO_KEY, allworkouts.size());
+                allworkouts.set(viewIndex, editedWorkout);
+                //should not need to call showWorkout... but do need to rename button
+                Button btn = (Button) mScrollLinearView.getChildAt(viewIndex);
+                btn.setText(editedWorkout.getName());
+            }
+            if (resultCode == RESULT_CANCELED) {
+                tvtitle.setText("edit workout RESULT_CANCELED");
             }
         }
 
@@ -198,6 +215,14 @@ public class HH_home extends AppCompatActivity
     public void onDialogNeutralClick(DialogFragment dialog, int viewIndex) {
         //User touched RUN
         tvtitle.setText("DialogNeutralClick");
+        Workout_obj activeWorkout = allworkouts.get(viewIndex);
+        Intent intent = new Intent(this, CreateWorkoutActivity_V2.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SER_KEY, activeWorkout);
+        intent.putExtras(bundle);
+        intent.putExtra(WO_KEY, viewIndex);
+
+        startActivityForResult(intent, EDIT_WORKOUT);
     }
 
 }

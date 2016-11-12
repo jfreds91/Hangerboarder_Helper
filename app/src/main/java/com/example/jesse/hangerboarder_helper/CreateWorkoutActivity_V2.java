@@ -19,17 +19,21 @@ import android.widget.TextView;
  */
 
 public class CreateWorkoutActivity_V2 extends Activity{
-    // Parent view for all rows and the add button
+
     private LinearLayout mContainerView;
-    // The "Add new" button
     private Button mAddButton;
+    private EditText editTextWorkoutName;
 
     //There should always be only one empty row, other rows will be removed
     private View mExclusiveEmptyView;
 
     public final static String SER_KEY = "com.example.HangerBoarderHelper.ser";
+    public final static String WO_KEY = "com.example.HangerBoarderHelper.wokey";
     private Button btnCreateWorkout;
     private TextView catitle;
+
+    int viewIndex = -1;
+    Workout_obj newWorkout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +45,21 @@ public class CreateWorkoutActivity_V2 extends Activity{
         mAddButton = (Button) findViewById(R.id.btnAddNewItem);
         catitle = (TextView) findViewById(R.id.createTitle);
         btnCreateWorkout = (Button) findViewById(R.id.createWorkoutButton);
+        editTextWorkoutName = (EditText) findViewById(R.id.workoutName);
 
-        // Add some examples
-        inflateEditRow("Workout name");
-        inflateEditRow("EX1");
+        //Try to get workout viewindex from intent. If it defaults, run normally. Otherwise, load workout
+        Intent intent = this.getIntent();
+        viewIndex = intent.getIntExtra(WO_KEY, viewIndex);
+        if (viewIndex != -1) {
+            newWorkout = (Workout_obj) intent.getSerializableExtra(SER_KEY);
+            editTextWorkoutName.setText(newWorkout.getName());
+            for (int i=0; i < newWorkout.size(); i++) {
+                inflateEditRow(newWorkout.get(i).getName());
+            }
+        } else {
+            // Add some examples
+            inflateEditRow("EX1");
+        }
     }
 
     @Override
@@ -138,57 +153,50 @@ public class CreateWorkoutActivity_V2 extends Activity{
     }
 
     public void saveAndReturn() {
-        //test title actions
-        Integer n = new Integer(mContainerView.getChildCount());
-        //catitle.setText(n.toString());
-        //Do:
-        // check 2+ LinearLayouts
-        // check No LinearLayout editText child is empty
-        // Get LinearLayout editText children strings
-        int exnum = 0;
-        String newName = "";
-        for (int i = 0; i < n; i++) {
-            if(mContainerView.getChildAt(i) instanceof LinearLayout) {
-                LinearLayout child = (LinearLayout) mContainerView.getChildAt(i);
-                EditText e = (EditText) child.getChildAt(0);
-                if (!e.getText().toString().equals("")) {
-                    exnum++;
-                }
-                if (exnum == 1){
-                    newName = e.getText().toString();
-                }
-            }
-        }
-        if(exnum < 2) {
-            catitle.setText("need at least two named fields");
-            return;
+    //Assign workout name and exercises, make sure at least one exercise
+
+        String newName = "New Workout"; //default if name field is blank
+        if (!editTextWorkoutName.getText().toString().equals("")) {
+            newName = editTextWorkoutName.getText().toString();
         }
 
-        //error checking done - create workout to return
-        Workout_obj newWorkout = new Workout_obj(newName);
+        if (viewIndex == -1) {
+            newWorkout = new Workout_obj(newName);
+        } else {
+            newWorkout.setName(newName);
+            newWorkout.clear(); //THIS WILL REMOVE ALL EXERCISE WEIGHT HISTORY, MAY NEED TO REMOVE LATER
+        }
+
         Exercise_obj tempEx;
-        String exName;
-        exnum = 0;
+        Integer n = new Integer(mContainerView.getChildCount());
         for (int i = 0; i < n; i++) {
             if(mContainerView.getChildAt(i) instanceof LinearLayout) {
                 LinearLayout child = (LinearLayout) mContainerView.getChildAt(i);
                 EditText e = (EditText) child.getChildAt(0);
                 if (!e.getText().toString().equals("")) {
-                    exnum++;
-                    if (exnum > 1) {
-                        tempEx = new Exercise_obj(e.getText().toString());
-                        newWorkout.add(tempEx);
-                    }
+                    tempEx = new Exercise_obj(e.getText().toString());
+                    newWorkout.add(tempEx);
                 }
             }
         }
+
+        //make sure at least one workout
+        if (newWorkout.size() == 0) {catitle.setText("need at least one exercise"); return; }
+
         //Attach workout object to intent
         Intent returnIntent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable(SER_KEY, newWorkout);
         returnIntent.putExtras(bundle);
-        setResult(Activity.RESULT_OK,returnIntent);
-        finish();
+        if (viewIndex == -1) { //new workout case
+            setResult(Activity.RESULT_OK,returnIntent);
+            finish();
+        } else { //edit workout case
+            returnIntent.putExtra(WO_KEY, viewIndex);
+            setResult(Activity.RESULT_OK,returnIntent);
+            finish();
+        }
+
     }
 
 }
