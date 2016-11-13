@@ -8,10 +8,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -35,6 +37,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
     int viewIndex = -1;
     Workout_obj newWorkout;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +57,11 @@ public class CreateWorkoutActivity_V2 extends Activity{
             newWorkout = (Workout_obj) intent.getSerializableExtra(SER_KEY);
             editTextWorkoutName.setText(newWorkout.getName());
             for (int i=0; i < newWorkout.size(); i++) {
-                inflateEditRow(newWorkout.get(i).getName());
+                inflateEditRow(newWorkout.get(i));
             }
         } else {
             // Add some examples
-            inflateEditRow("EX1");
+            inflateEditRow(null);
         }
     }
 
@@ -98,15 +101,25 @@ public class CreateWorkoutActivity_V2 extends Activity{
     }
 
     //Helper for inflating a row
-    private void inflateEditRow(String name) {
+    private void inflateEditRow(Exercise_obj exercise_obj) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.row, mContainerView, false);
         final ImageButton deleteButton = (ImageButton) rowView.findViewById(R.id.buttonDelete);
         final EditText editText = (EditText) rowView.findViewById(R.id.editText);
+        final Spinner spinner = (Spinner) rowView.findViewById(R.id.spinnerCategory);
 
-        if (name != null && !name.isEmpty()) {
-            editText.setText(name);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        if (exercise_obj != null && !exercise_obj.getName().isEmpty()) {
+            editText.setText(exercise_obj.getName());
+            spinner.setSelection(exercise_obj.getSpinnerPosition());
         } else {
             mExclusiveEmptyView = rowView;
             deleteButton.setVisibility(View.INVISIBLE);
@@ -175,6 +188,9 @@ public class CreateWorkoutActivity_V2 extends Activity{
                 EditText e = (EditText) child.getChildAt(0);
                 if (!e.getText().toString().equals("")) {
                     tempEx = new Exercise_obj(e.getText().toString());
+                    Spinner spinner = (Spinner) child.getChildAt(1);
+                    tempEx.setSpinnerPosition(spinner.getSelectedItemPosition());
+                    tempEx.setSpinnerType(spinner.getSelectedItem().toString());
                     newWorkout.add(tempEx);
                 }
             }

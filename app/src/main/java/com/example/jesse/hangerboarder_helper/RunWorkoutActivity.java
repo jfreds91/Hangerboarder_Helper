@@ -27,7 +27,7 @@ public class RunWorkoutActivity extends Activity {
     long startTime = 0;
     long elapsedTime = 0;
     long maxTime = 90000; //Must be in milliseconds
-    long timeOnPerTen = 7;
+    long timeOnPerTen = 10;
     long millis;
     int activeExNum;
     int activeWoNum;
@@ -47,10 +47,12 @@ public class RunWorkoutActivity extends Activity {
                 seconds = seconds % 60;
 
                 timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
-                if (seconds % 10 > timeOnPerTen ||seconds % 10 == 0) {
-                    timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
-                } else {
-                    timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
+                if (timeOnPerTen != 10) {
+                    if (seconds % 10 > timeOnPerTen || seconds % 10 == 0) {
+                        timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
+                    } else {
+                        timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
+                    }
                 }
                 timerHandler.postDelayed(this, 500);
             }
@@ -71,11 +73,24 @@ public class RunWorkoutActivity extends Activity {
         String totalExS = Integer.toString(totalEx);
         String thisExS = Integer.toString(activeExNum + 1);
         runWorkoutTitle = (TextView) findViewById(R.id.runWorkoutTitle);
-        runWorkoutTitle.setText("Exercise " + activeWorkout.get(activeExNum).getName() + ", " + thisExS + "/" +totalExS);
+        runWorkoutTitle.setText("Exercise " + activeWorkout.get(activeExNum).getName() + ", (" + activeWorkout.get(activeExNum).getSpinnerType() + "), " + thisExS + "/" +totalExS);
         lastWeightTextView = (TextView) findViewById(R.id.lastWeightTextView);
         lastWeightTextView.setText(Double.toString(activeWorkout.get(activeExNum).getLast()));
 
         //Initialize timer settings
+        switch (activeWorkout.get(activeExNum).getSpinnerPosition()) {
+            case 0: // 7/3 Repeater
+                timeOnPerTen = 7;
+                break;
+            case 1: // 5/5 Repeater
+                timeOnPerTen = 5;
+                break;
+            case 2: // Max Hang
+                break;
+            case 3: // Other
+                break;
+        }
+
         timerTextView = (TextView) findViewById(R.id.runWorkoutTimerText);
         int minutes = (int) (maxTime/1000) /60;
         int seconds = (int) (maxTime/1000) % 60;

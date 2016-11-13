@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Exercise_obj implements Serializable { //extends ArrayList {
     private String name;
+    private String spinnerType;
+    private int spinnerPosition;
     private ArrayList<Double> exweights = new ArrayList<>();
 
     public Exercise_obj(String name){
@@ -20,7 +22,6 @@ public class Exercise_obj implements Serializable { //extends ArrayList {
     public void setName(String name) {
         this.name = name;
     }
-
     public String getName() {
         return this.name;
     }
@@ -28,7 +29,11 @@ public class Exercise_obj implements Serializable { //extends ArrayList {
     public void add(Double weight) {
         this.exweights.add(weight);
     }
-
     public Double getLast() { return this.exweights.get(this.exweights.size() - 1); }
 
+    public int getSpinnerPosition() { return this.spinnerPosition; }
+    public void setSpinnerPosition(int i) {this.spinnerPosition = i;}
+
+    public String getSpinnerType() { return this.spinnerType; }
+    public void setSpinnerType(String s) {this.spinnerType = s; }
 }
