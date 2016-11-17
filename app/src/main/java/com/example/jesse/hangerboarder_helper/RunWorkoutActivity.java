@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +46,9 @@ public class RunWorkoutActivity extends Activity {
                 int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
+                int mseconds = ((int) millis % 1000)/10;
 
-                timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
+                timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 if (timeOnPerTen != 10) {
                     if (seconds % 10 > timeOnPerTen || seconds % 10 == 0) {
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
@@ -54,7 +56,7 @@ public class RunWorkoutActivity extends Activity {
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                     }
                 }
-                timerHandler.postDelayed(this, 500);
+                timerHandler.postDelayed(this, 5);
             }
         }
     };
@@ -63,6 +65,9 @@ public class RunWorkoutActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.run_workout_activity);
+
+        thisWeightEditText = (EditText) findViewById(R.id.thisWeightEditText);
+        thisWeightEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         //get serialized content
         Intent intent = this.getIntent();
@@ -94,7 +99,8 @@ public class RunWorkoutActivity extends Activity {
         timerTextView = (TextView) findViewById(R.id.runWorkoutTimerText);
         int minutes = (int) (maxTime/1000) /60;
         int seconds = (int) (maxTime/1000) % 60;
-        timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
+        int mseconds = ((int) millis % 1000)/10;
+        timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
         Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
         b.setText("Start");
@@ -121,7 +127,7 @@ public class RunWorkoutActivity extends Activity {
             public void onClick(View v) {
                 //The proceed button returns to the HH_home activity with the specified workout and active (now completed) ex index
                 //Get completed weight
-                thisWeightEditText = (EditText) findViewById(R.id.thisWeightEditText);
+
                 String s = thisWeightEditText.getText().toString();
                 Double d;
                 if (s == null || s.isEmpty()) {

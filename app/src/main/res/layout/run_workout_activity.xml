@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:text="00:00"
-        android:textSize="180sp"
+        android:text="00:00:00"
+        android:textSize="100sp"
         android:paddingBottom="15dp"
         android:layout_below="@+id/runWorkoutTitle"
         android:layout_alignParentLeft="true"
@@ -86,7 +86,7 @@
             android:id="@+id/thisWeightEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
+            android:inputType="numberDecimal|numberSigned"
             android:hint="00"
             android:textSize="20sp"/>
 

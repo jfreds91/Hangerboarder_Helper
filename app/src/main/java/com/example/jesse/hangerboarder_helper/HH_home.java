@@ -13,6 +13,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -26,6 +33,7 @@ public class HH_home extends AppCompatActivity
     static final int RUN_WORKOUT = 2; //Request code
     static final int EDIT_WORKOUT = 3; //Request code
     public final static String EXTRA_MESSAGE = "com.example.Hangerboarder_Helper.MESSAGE";
+    static final String datafile = ".com.example.HangerBoarderHelper.serdata";
 
     Button btngenerate, btntest, btnaddworkout;
     public LinearLayout mScrollLinearView;
@@ -157,7 +165,7 @@ public class HH_home extends AppCompatActivity
 
     /** Called when the user clicks the Test button */
     public void runTest(View view) {
-        Intent intent = new Intent(this, TestResultsActivity.class);
+        /*Intent intent = new Intent(this, TestResultsActivity.class);
         String message = "No workouts defined";
         try {
             message = allworkouts.get(allworkouts.size() - 1).extoString();
@@ -165,7 +173,55 @@ public class HH_home extends AppCompatActivity
         catch(IndexOutOfBoundsException ioobe) {}
 
         intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        startActivity(intent);*/
+
+        //Test save data
+
+        FileOutputStream fos = null;
+        File file;
+        try {
+            file = new File(this.getFilesDir() + datafile);
+            try {fos = this.openFileOutput(datafile, Context.MODE_PRIVATE);
+            } catch (FileNotFoundException e) {
+                file.createNewFile();
+            }
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(allworkouts);
+            os.close();
+            fos.close();
+            tvtitle.setText("save successful...?");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void runTest2(View view) {
+
+        FileInputStream fis = null;
+        File file;
+        try {
+            file = new File(this.getFilesDir() + datafile);
+            try {fis = this.openFileInput(datafile);
+            } catch (FileNotFoundException e) {
+                file.createNewFile();
+            }
+            ObjectInputStream is = new ObjectInputStream(fis);
+            try {
+                allworkouts = (ArrayList<Workout_obj>) is.readObject();
+            } catch (ClassNotFoundException e) {}
+            is.close();
+            fis.close();
+            tvtitle.setText("load successful...?");
+            //remove buttons and re-add them from scratch
+            mScrollLinearView.removeAllViews();
+            for (Workout_obj wo: allworkouts) {
+                showWorkout(wo);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void showWorkout(Workout_obj showWorkout){
