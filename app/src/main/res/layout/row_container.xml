@@ -41,4 +41,13 @@
         android:text="Save and Return"
         android:id="@+id/createWorkoutButton"
         android:onClick="onSaveAndReturnClicked" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Workout"
+        android:textColor="@color/colorOn"
+        android:id="@+id/deleteWorkoutButton"
+        android:onClick="onDeleteAndReturnClicked"
+        android:visibility="gone"/>
 </LinearLayout>

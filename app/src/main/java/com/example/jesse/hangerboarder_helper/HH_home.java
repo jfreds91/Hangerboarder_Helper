@@ -118,13 +118,21 @@ public class HH_home extends AppCompatActivity
         //WORKOUT EDITED
         if (requestCode == EDIT_WORKOUT) {
             if (resultCode == RESULT_OK) {
-                tvtitle.setText("Workout successfully edited");
                 Workout_obj editedWorkout = (Workout_obj) data.getSerializableExtra(SER_KEY);
-                int viewIndex = data.getIntExtra(WO_KEY, allworkouts.size());
-                allworkouts.set(viewIndex, editedWorkout);
-                //should not need to call showWorkout... but do need to rename button
+                int viewIndex = data.getIntExtra(WO_KEY, allworkouts.size()); //the default here is allworkouts.size() just in case there's a problem, so the workout is added to the end
                 Button btn = (Button) mScrollLinearView.getChildAt(viewIndex);
-                btn.setText(editedWorkout.getName());
+                if (editedWorkout.isEmpty()) {
+                    //delete workout
+                    allworkouts.remove(viewIndex);
+                    mScrollLinearView.removeView(btn);
+                    tvtitle.setText("Workout successfully deleted");
+                } else {
+                    //update edited workout
+                    allworkouts.set(viewIndex, editedWorkout);
+                    //should not need to call showWorkout... but do need to rename button
+                    btn.setText(editedWorkout.getName());
+                    tvtitle.setText("Workout successfully edited");
+                }
             }
             if (resultCode == RESULT_CANCELED) {
                 tvtitle.setText("edit workout RESULT_CANCELED");

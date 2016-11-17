@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.nio.charset.Charset;
+
 /**
  * Created by Jesse on 10/29/2016.
  */
@@ -59,6 +61,8 @@ public class CreateWorkoutActivity_V2 extends Activity{
             for (int i=0; i < newWorkout.size(); i++) {
                 inflateEditRow(newWorkout.get(i));
             }
+            //make delete button visible
+            findViewById(R.id.deleteWorkoutButton).setVisibility(View.VISIBLE);
         } else {
             // Add some examples
             inflateEditRow(null);
@@ -91,6 +95,11 @@ public class CreateWorkoutActivity_V2 extends Activity{
     //onClick handler for the "Save and Return" button
     public void onSaveAndReturnClicked(View v) {
         saveAndReturn();
+    }
+
+    //onClick handler for the "Delete and Return" button
+    public void onDeleteAndReturnClicked(View v) {
+        deleteAndReturn();
     }
 
 
@@ -168,7 +177,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
     public void saveAndReturn() {
     //Assign workout name and exercises, make sure at least one exercise
 
-        String newName = "New Workout"; //default if name field is blank
+        String newName = editTextWorkoutName.getHint().toString(); //default if name field is blank
         if (!editTextWorkoutName.getText().toString().equals("")) {
             newName = editTextWorkoutName.getText().toString();
         }
@@ -215,4 +224,16 @@ public class CreateWorkoutActivity_V2 extends Activity{
 
     }
 
+    public void deleteAndReturn() {
+        newWorkout.clearAll();
+
+        //Attach workout object to intent
+        Intent returnIntent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SER_KEY, newWorkout);
+        returnIntent.putExtras(bundle);
+        returnIntent.putExtra(WO_KEY, viewIndex);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+    }
 }
