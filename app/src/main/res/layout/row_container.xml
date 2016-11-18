@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,38 +16,64 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/workoutName"
         android:hint="New Workout"
-        android:gravity="center" />
+        android:layout_gravity="center_horizontal" />
 
-    <Button
-        android:id="@+id/btnAddNewItem"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/transparent_background"
-        android:gravity="center_vertical|left"
-        android:onClick="onAddNewClicked"
-        android:paddingLeft="5dp"
-        android:text="@string/button_add_new_text"
-        android:textColor="@android:color/darker_gray" />
+        android:layout_below="@+id/workoutName"
+        android:id="@+id/scrollViewParent">
 
-    <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/scrollLinearView_create">
+
+            <Button
+                android:id="@+id/btnAddNewItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/transparent_background"
+                android:gravity="center_vertical|left"
+                android:onClick="onAddNewClicked"
+                android:paddingLeft="5dp"
+                android:text="@string/button_add_new_text"
+                android:textColor="@android:color/darker_gray" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save and Return"
-        android:id="@+id/createWorkoutButton"
-        android:onClick="onSaveAndReturnClicked" />
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete Workout"
-        android:textColor="@color/colorOn"
-        android:id="@+id/deleteWorkoutButton"
-        android:onClick="onDeleteAndReturnClicked"
-        android:visibility="gone"/>
-</LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save and Return"
+            android:id="@+id/createWorkoutButton"
+            android:onClick="onSaveAndReturnClicked" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Workout"
+            android:textColor="@color/colorOn"
+            android:id="@+id/deleteWorkoutButton"
+            android:onClick="onDeleteAndReturnClicked"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"/>
+
+
+    </LinearLayout>
+</RelativeLayout>

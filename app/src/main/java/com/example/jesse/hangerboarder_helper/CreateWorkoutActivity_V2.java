@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,7 +25,8 @@ import java.nio.charset.Charset;
 
 public class CreateWorkoutActivity_V2 extends Activity{
 
-    private LinearLayout mContainerView;
+    private RelativeLayout mContainerView;
+    private LinearLayout mScrollLinearView_Create;
     private Button mAddButton;
     private EditText editTextWorkoutName;
 
@@ -46,7 +48,8 @@ public class CreateWorkoutActivity_V2 extends Activity{
 
         setContentView(R.layout.row_container);
 
-        mContainerView = (LinearLayout) findViewById(R.id.parentView);
+        mContainerView = (RelativeLayout) findViewById(R.id.parentView);
+        mScrollLinearView_Create = (LinearLayout) findViewById(R.id.scrollLinearView_create);
         mAddButton = (Button) findViewById(R.id.btnAddNewItem);
         catitle = (TextView) findViewById(R.id.createTitle);
         btnCreateWorkout = (Button) findViewById(R.id.createWorkoutButton);
@@ -106,7 +109,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
     // onClick handler for the "X" button of each row
     public void onDeleteClicked(View v) {
         //remove the row by calling the getParent on button
-        mContainerView.removeView((View) v.getParent());
+        mScrollLinearView_Create.removeView((View) v.getParent());
     }
 
     //Helper for inflating a row
@@ -141,7 +144,6 @@ public class CreateWorkoutActivity_V2 extends Activity{
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -154,7 +156,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
                     deleteButton.setVisibility(View.INVISIBLE);
 
                     if (mExclusiveEmptyView != null && mExclusiveEmptyView != rowView) {
-                        mContainerView.removeView(mExclusiveEmptyView);
+                        mScrollLinearView_Create.removeView(mExclusiveEmptyView);
                     }
                     mExclusiveEmptyView = rowView;
 
@@ -170,8 +172,8 @@ public class CreateWorkoutActivity_V2 extends Activity{
             }
         });
 
-        //Inflate at the end of all rows but before the "Add new" button and Save and Return button
-        mContainerView.addView(rowView, mContainerView.getChildCount() - 2);
+        //Inflate at the end of scroll layout, but before the add new button
+        mScrollLinearView_Create.addView(rowView, mScrollLinearView_Create.getChildCount() - 1);
     }
 
     public void saveAndReturn() {
@@ -190,10 +192,10 @@ public class CreateWorkoutActivity_V2 extends Activity{
         }
 
         Exercise_obj tempEx;
-        Integer n = new Integer(mContainerView.getChildCount());
+        Integer n = new Integer(mScrollLinearView_Create.getChildCount());
         for (int i = 0; i < n; i++) {
-            if(mContainerView.getChildAt(i) instanceof LinearLayout) {
-                LinearLayout child = (LinearLayout) mContainerView.getChildAt(i);
+            if(mScrollLinearView_Create.getChildAt(i) instanceof LinearLayout) {
+                LinearLayout child = (LinearLayout) mScrollLinearView_Create.getChildAt(i);
                 EditText e = (EditText) child.getChildAt(0);
                 if (!e.getText().toString().equals("")) {
                     tempEx = new Exercise_obj(e.getText().toString());

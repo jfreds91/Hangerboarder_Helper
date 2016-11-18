@@ -52,6 +52,9 @@ public class HH_home extends AppCompatActivity
         mScrollLinearView = (LinearLayout) findViewById(R.id.scrollLinearView);
 
 
+        //Load Datafile
+        loadData();
+
         //set click listener which sends you to CreateWorkoutActivity
         OnClickListener oclBtnAddWorkout = new OnClickListener() {
             @Override
@@ -98,6 +101,13 @@ public class HH_home extends AppCompatActivity
         //add any existing workouts
         //TODO: call showWorkout(allworkouts)
     }
+
+    //The problem with this method of loading is that it reloads the save file right after a workout is deleted, nullifying deletion
+/*    @Override
+    public void onResume(){
+        super.onResume();
+        loadData();
+    }*/
 
     //this is called if after the user returns from an activity for a result
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -184,52 +194,13 @@ public class HH_home extends AppCompatActivity
         startActivity(intent);*/
 
         //Test save data
-
-        FileOutputStream fos = null;
-        File file;
-        try {
-            file = new File(this.getFilesDir() + datafile);
-            try {fos = this.openFileOutput(datafile, Context.MODE_PRIVATE);
-            } catch (FileNotFoundException e) {
-                file.createNewFile();
-            }
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(allworkouts);
-            os.close();
-            fos.close();
-            tvtitle.setText("save successful...?");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveData();
 
     }
 
     public void runTest2(View view) {
-
-        FileInputStream fis = null;
-        File file;
-        try {
-            file = new File(this.getFilesDir() + datafile);
-            try {fis = this.openFileInput(datafile);
-            } catch (FileNotFoundException e) {
-                file.createNewFile();
-            }
-            ObjectInputStream is = new ObjectInputStream(fis);
-            try {
-                allworkouts = (ArrayList<Workout_obj>) is.readObject();
-            } catch (ClassNotFoundException e) {}
-            is.close();
-            fis.close();
-            tvtitle.setText("load successful...?");
-            //remove buttons and re-add them from scratch
-            mScrollLinearView.removeAllViews();
-            for (Workout_obj wo: allworkouts) {
-                showWorkout(wo);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        //load data
+        loadData();
     }
 
     public void showWorkout(Workout_obj showWorkout){
@@ -289,6 +260,56 @@ public class HH_home extends AppCompatActivity
         startActivityForResult(intent, EDIT_WORKOUT);
     }
 
+    public void saveData(){
+        FileOutputStream fos = null;
+        File file;
+        try {
+            file = new File(this.getFilesDir() + datafile);
+            try {fos = this.openFileOutput(datafile, Context.MODE_PRIVATE);
+            } catch (FileNotFoundException e) {
+                file.createNewFile();
+            }
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(allworkouts);
+            os.close();
+            fos.close();
+            tvtitle.setText("save successful...?");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadData(){
+        FileInputStream fis = null;
+        File file;
+        try {
+            file = new File(this.getFilesDir() + datafile);
+            try {fis = this.openFileInput(datafile);
+            } catch (FileNotFoundException e) {
+                file.createNewFile();
+            }
+            ObjectInputStream is = new ObjectInputStream(fis);
+            try {
+                allworkouts = (ArrayList<Workout_obj>) is.readObject();
+            } catch (ClassNotFoundException e) {}
+            is.close();
+            fis.close();
+            tvtitle.setText("load successful...?");
+            //remove buttons and re-add them from scratch
+            mScrollLinearView.removeAllViews();
+            for (Workout_obj wo: allworkouts) {
+                showWorkout(wo);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveData();
+    }
 }
 
 
