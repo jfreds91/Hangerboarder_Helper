@@ -56,15 +56,15 @@ public class RunWorkoutActivity extends Activity {
                 timerTextView.setText("SET COMPLETE");
             } else {
                 int seconds = (int) (millis / 1000);
-                progressAdjustedTimeOn = ((millis / 1000)%interval)*100/timeOnPerInterval;
-                progressAdjustedTimeOff = ((millis / 1000)%(interval))*100/(interval-timeOnPerInterval);
+                progressAdjustedTimeOn = ((((System.currentTimeMillis() - startTime + elapsedTime) %(interval*1000)) -((interval-timeOnPerInterval)*1000)) / timeOnPerInterval/10    );
+                progressAdjustedTimeOff = (((System.currentTimeMillis() - startTime + elapsedTime) %(interval*1000))/(interval-timeOnPerInterval)/10);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 int mseconds = ((int) millis % 1000)/10;
 
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 if (timeOnPerInterval != interval) {
-                    if (seconds % interval > timeOnPerInterval || seconds % interval == 0) {
+                    if ((seconds+1) % interval > timeOnPerInterval || (seconds+1) % interval == 0) {
                         //Climber is OFF the hangboard
                         if (hanging == true){
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
@@ -80,16 +80,15 @@ public class RunWorkoutActivity extends Activity {
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP,1000);
                             hanging = true;
                             //mProgress.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
-                        };
+                        }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                     }
                     if(hanging == true) {
                         mProgress.setProgress((int) progressAdjustedTimeOn);
-                        runWorkoutTitle.setText(Integer.toString((int) progressAdjustedTimeOn));
-                        //runWorkoutTitle.setText(Integer.toString(seconds));
+                        //runWorkoutTitle.setText(Integer.toString((int) ((((System.currentTimeMillis() - startTime + elapsedTime) %(interval*1000)) -((interval-timeOnPerInterval)*1000)) / timeOnPerInterval/10    )));
                     } else {
                         mProgress.setProgress((int) progressAdjustedTimeOff);
-                        runWorkoutTitle.setText(Integer.toString((int) progressAdjustedTimeOff));
+                        //runWorkoutTitle.setText(Integer.toString((int) progressAdjustedTimeOff));
                     }
                 }
                 timerHandler.postDelayed(this, 5);
