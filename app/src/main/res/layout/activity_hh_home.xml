@@ -23,21 +23,24 @@
         android:layout_height="wrap_content"
         android:text="@string/TestButtonName"
         android:onClick="runTest"
-        android:id="@+id/testButton" />
+        android:id="@+id/testButton"
+        android:visibility="gone"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/TestButtonName2"
         android:onClick="runTest2"
-        android:id="@+id/testButton2" />
+        android:id="@+id/testButton2"
+        android:visibility="gone"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/generateWorkoutName"
         android:onClick="generateWorkout"
-        android:id="@+id/generateWorkoutButton" />
+        android:id="@+id/generateWorkoutButton"
+        android:visibility="gone"/>
 
     <Button
         android:text="@string/addWorkoutName"

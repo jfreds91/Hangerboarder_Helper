@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/runWorkoutTimerText"
+        android:visibility="gone"
+        style="@android:style/Widget.ProgressBar.Horizontal"/>
+
     <Button
         android:id="@+id/runWorkoutProceedButton"
         android:layout_width="match_parent"
@@ -19,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/runWorkoutTimerText"
+        android:layout_below="@+id/progressbar"
         android:gravity="center_horizontal">
         <Button
             android:id="@+id/runWorkoutStartPauseButton"

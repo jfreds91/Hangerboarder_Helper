@@ -11,7 +11,10 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import static java.lang.StrictMath.toIntExact;
 
 /**
  * Created by Jesse on 11/6/2016.
@@ -33,11 +36,14 @@ public class RunWorkoutActivity extends Activity {
     long timeOnPerInterval = 10;
     long interval = 15;
     long millis;
+    long progressAdjustedTimeOn;
+    long progressAdjustedTimeOff;
     int activeExNum;
     int activeWoNum;
     boolean hanging = false;
     enum Timerstate {Running, Stopped, Paused};
     final Timerstate[] stateArray = {Timerstate.Stopped};// = {{Timerstate.Stopped}};
+    ProgressBar mProgress;
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -50,6 +56,8 @@ public class RunWorkoutActivity extends Activity {
                 timerTextView.setText("SET COMPLETE");
             } else {
                 int seconds = (int) (millis / 1000);
+                progressAdjustedTimeOn = ((millis / 1000)%interval)*100/timeOnPerInterval;
+                progressAdjustedTimeOff = ((millis / 1000)%(interval))*100/(interval-timeOnPerInterval);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 int mseconds = ((int) millis % 1000)/10;
@@ -62,6 +70,7 @@ public class RunWorkoutActivity extends Activity {
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP2,1000);
                             hanging = false;
+                            //mProgress.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
                     } else {
@@ -70,8 +79,17 @@ public class RunWorkoutActivity extends Activity {
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP,1000);
                             hanging = true;
-                        }
+                            //mProgress.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
+                        };
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
+                    }
+                    if(hanging == true) {
+                        mProgress.setProgress((int) progressAdjustedTimeOn);
+                        runWorkoutTitle.setText(Integer.toString((int) progressAdjustedTimeOn));
+                        //runWorkoutTitle.setText(Integer.toString(seconds));
+                    } else {
+                        mProgress.setProgress((int) progressAdjustedTimeOff);
+                        runWorkoutTitle.setText(Integer.toString((int) progressAdjustedTimeOff));
                     }
                 }
                 timerHandler.postDelayed(this, 5);
@@ -129,6 +147,8 @@ public class RunWorkoutActivity extends Activity {
         timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
 
+        mProgress = (ProgressBar) findViewById(R.id.progressbar);
+
         Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
         b.setText("Start");
         b.setOnClickListener(new View.OnClickListener(){
@@ -142,12 +162,14 @@ public class RunWorkoutActivity extends Activity {
                         b.setText("Pause");
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable,0);
+                        mProgress.setVisibility(View.VISIBLE);
                         break;
                     case Paused: //pressed button when timer was paused. should run timer
                         stateArray[0] = Timerstate.Running;
                         b.setText("Pause");
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable,0);
+                        mProgress.setVisibility(View.VISIBLE);
                         break;
                     case Running: //pressed button when timer was running. should pause timer
                         stateArray[0] = Timerstate.Paused;
@@ -175,6 +197,7 @@ public class RunWorkoutActivity extends Activity {
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                 hanging = false;
+                mProgress.setVisibility(View.INVISIBLE);
             }
         });
 
