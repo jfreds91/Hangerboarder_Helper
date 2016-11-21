@@ -2,6 +2,8 @@ package com.example.jesse.hangerboarder_helper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
@@ -28,10 +30,14 @@ public class RunWorkoutActivity extends Activity {
     long startTime = 0;
     long elapsedTime = 0;
     long maxTime = 90000; //Must be in milliseconds
-    long timeOnPerTen = 10;
+    long timeOnPerInterval = 10;
+    long interval = 15;
     long millis;
     int activeExNum;
     int activeWoNum;
+    boolean hanging = false;
+    enum Timerstate {Running, Stopped, Paused};
+    final Timerstate[] stateArray = {Timerstate.Stopped};// = {{Timerstate.Stopped}};
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -49,10 +55,22 @@ public class RunWorkoutActivity extends Activity {
                 int mseconds = ((int) millis % 1000)/10;
 
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
-                if (timeOnPerTen != 10) {
-                    if (seconds % 10 > timeOnPerTen || seconds % 10 == 0) {
+                if (timeOnPerInterval != interval) {
+                    if (seconds % interval > timeOnPerInterval || seconds % interval == 0) {
+                        //Climber is OFF the hangboard
+                        if (hanging == true){
+                            ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
+                            toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP2,1000);
+                            hanging = false;
+                        }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
                     } else {
+                        //Climber is ON the hangboard
+                        if (hanging == false){
+                            ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
+                            toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP,1000);
+                            hanging = true;
+                        }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                     }
                 }
@@ -65,6 +83,7 @@ public class RunWorkoutActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.run_workout_activity);
+
 
         thisWeightEditText = (EditText) findViewById(R.id.thisWeightEditText);
         thisWeightEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -84,15 +103,22 @@ public class RunWorkoutActivity extends Activity {
 
         //Initialize timer settings
         switch (activeWorkout.get(activeExNum).getSpinnerPosition()) {
-            case 0: // 7/3 Repeater
-                timeOnPerTen = 7;
+            case 0: // 10/5 Repeater
+                timeOnPerInterval = 10;
+                interval = 15;
+                maxTime = 90000;
                 break;
-            case 1: // 5/5 Repeater
-                timeOnPerTen = 5;
+            case 1: // 7/3 Repeater
+                timeOnPerInterval = 7;
+                interval = 10;
+                maxTime = 90000;
                 break;
-            case 2: // Max Hang
+            case 2: // 5/5 Repeater
+                timeOnPerInterval = 5;
+                interval = 10;
+                maxTime = 90000;
                 break;
-            case 3: // Other
+            case 3: // Max Hang
                 break;
         }
 
@@ -102,22 +128,53 @@ public class RunWorkoutActivity extends Activity {
         int mseconds = ((int) millis % 1000)/10;
         timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
+
         Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
         b.setText("Start");
-
         b.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Button b = (Button) v;
-                if (b.getText().equals("Pause")) {
-                    timerHandler.removeCallbacks(timerRunnable);
-                    elapsedTime = elapsedTime + (System.currentTimeMillis() - startTime);
-                    b.setText("Start");
-                } else {
-                    startTime = System.currentTimeMillis();
-                    timerHandler.postDelayed(timerRunnable,0);
-                    b.setText("Pause");
+
+                switch (stateArray[0]) {
+                    case Stopped: //pressed button when timer was stopped. should run timer
+                        stateArray[0] = Timerstate.Running;
+                        b.setText("Pause");
+                        startTime = System.currentTimeMillis();
+                        timerHandler.postDelayed(timerRunnable,0);
+                        break;
+                    case Paused: //pressed button when timer was paused. should run timer
+                        stateArray[0] = Timerstate.Running;
+                        b.setText("Pause");
+                        startTime = System.currentTimeMillis();
+                        timerHandler.postDelayed(timerRunnable,0);
+                        break;
+                    case Running: //pressed button when timer was running. should pause timer
+                        stateArray[0] = Timerstate.Paused;
+                        timerHandler.removeCallbacks(timerRunnable);
+                        elapsedTime = elapsedTime + (System.currentTimeMillis() - startTime);
+                        b.setText("Start");
+                        break;
                 }
+            }
+        });
+
+        Button br = (Button) findViewById(R.id.runWorkoutResetButton);
+        br.setText("Reset");
+        br.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Button br = (Button) v;
+                stateArray[0] = Timerstate.Stopped;
+                timerHandler.removeCallbacks(timerRunnable);
+                elapsedTime = 0;
+                millis = 0;
+                int minutes = (int) (maxTime/1000) /60;
+                int seconds = (int) (maxTime/1000) % 60;
+                int mseconds = ((int) millis % 1000)/10;
+                timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
+                timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
+                hanging = false;
             }
         });
 
@@ -150,11 +207,12 @@ public class RunWorkoutActivity extends Activity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
+        stateArray[0] = Timerstate.Stopped;
         timerHandler.removeCallbacks(timerRunnable);
         Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
-        b.setText("Start");
+        b.setText("Stopped");
     }
 
 }

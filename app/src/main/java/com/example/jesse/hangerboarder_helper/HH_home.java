@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,6 +55,8 @@ public class HH_home extends AppCompatActivity
 
         //Load Datafile
         loadData();
+        Toast.makeText(getApplicationContext(), "Load Successful",
+                Toast.LENGTH_SHORT).show();
 
         //set click listener which sends you to CreateWorkoutActivity
         OnClickListener oclBtnAddWorkout = new OnClickListener() {
@@ -119,6 +122,8 @@ public class HH_home extends AppCompatActivity
                 Workout_obj createdWorkout = (Workout_obj) data.getSerializableExtra(SER_KEY);
                 allworkouts.add(createdWorkout);
                 showWorkout(createdWorkout);
+                Toast.makeText(getApplicationContext(), "Workout Created",
+                        Toast.LENGTH_SHORT).show();
             }
             if (resultCode == RESULT_CANCELED) {
                 tvtitle.setText("RESULT_CANCELED");
@@ -136,12 +141,16 @@ public class HH_home extends AppCompatActivity
                     allworkouts.remove(viewIndex);
                     mScrollLinearView.removeView(btn);
                     tvtitle.setText("Workout successfully deleted");
+                    Toast.makeText(getApplicationContext(), "Workout Deleted",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     //update edited workout
                     allworkouts.set(viewIndex, editedWorkout);
                     //should not need to call showWorkout... but do need to rename button
                     btn.setText(editedWorkout.getName());
                     tvtitle.setText("Workout successfully edited");
+                    Toast.makeText(getApplicationContext(), "Workout Edited",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
             if (resultCode == RESULT_CANCELED) {
@@ -174,6 +183,8 @@ public class HH_home extends AppCompatActivity
                             startActivityForResult(intent, RUN_WORKOUT); //RUN_WORKOUT is the for-result key
                         } catch(IndexOutOfBoundsException ioobe) {
                             tvtitle.setText("Workout Complete!!!");
+                            Toast.makeText(getApplicationContext(), "Workout Complete",
+                                    Toast.LENGTH_SHORT).show();
                             allworkouts.set(runningWoNum, runningWorkout);
                         }
                     }
