@@ -8,7 +8,58 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         -->
+        <item name="android:background">#333333</item>
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:editTextStyle">@style/MyEditTextStyle</item>
+        <item name="android:alertDialogTheme">@style/MyAlertDialogTheme</item>
+        <!--
+        <item name="android:spinnerDropDownItemStyle">@style/MySpinnerDropDownStyle</item>
+        <item name="android:spinnerStyle">@style/MySpinnerStyle</item>
+        -->
     </style>
+
+    <style name="MyTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">#eaeaea</item>
+    </style>
+
+    <style name="MyEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:textColor">#eaeaea</item>
+        <item name="android:textColorHint">#cecece</item>
+    </style>
+
+    <style name="MyAlertDialogTheme" parent="android:Widget.TextView">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+        <item name="android:windowTitleStyle">@style/MyAlertDialogThemeTitleStyle</item>
+        <!--
+        <item name="android:windowTitleStyle">...</item>
+        <item name="android:textAppearanceMedium">...</item>
+        <item name="android:borderlessButtonStyle">...</item>
+        <item name="android:buttonBarStyle">...</item>
+        -->
+    </style>
+    
+    <style name="MyAlertDialogThemeTitleStyle" parent="@style/AppTheme">
+        <item name="android:textColor">#bababa</item>
+    </style>
+
+
+
+<!--
+    <style name="MySpinnerDropDownStyle" parent="android:Widget.Spinner.DropDown">
+        <item name="android:textColor">#eaeaea</item>
+        <item name="android:textColorHint">#cecece</item>
+    </style>
+
+    <style name="MySpinnerStyle" parent="android:Widget.Spinner">
+        <item name="android:textColor">#eaeaea</item>
+        <item name="android:textColorHint">#cecece</item>
+    </style>
+-->
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

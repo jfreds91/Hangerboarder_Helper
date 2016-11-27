@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+//import android.support.design.widget.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -100,10 +101,8 @@ public class HH_home extends AppCompatActivity
         };
         //assign click listener to button
         btngenerate.setOnClickListener(oclBtnGenerate);
-
-        //add any existing workouts
-        //TODO: call showWorkout(allworkouts)
     }
+
 
     //The problem with this method of loading is that it reloads the save file right after a workout is deleted, nullifying deletion
 /*    @Override

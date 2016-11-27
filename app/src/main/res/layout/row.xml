@@ -28,7 +28,7 @@
         android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/content_remove" 
+        android:src="@drawable/ic_close_circle_outline"
         android:background="@drawable/transparent_background"
         android:contentDescription="@string/button_delete_row_description"
         android:onClick="onDeleteClicked"/>

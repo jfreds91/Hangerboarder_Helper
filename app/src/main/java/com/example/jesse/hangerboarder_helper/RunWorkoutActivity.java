@@ -70,7 +70,6 @@ public class RunWorkoutActivity extends Activity {
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP2,1000);
                             hanging = false;
-                            //mProgress.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
                     } else {
@@ -79,7 +78,6 @@ public class RunWorkoutActivity extends Activity {
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP,1000);
                             hanging = true;
-                            //mProgress.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                     }
@@ -148,7 +146,7 @@ public class RunWorkoutActivity extends Activity {
 
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
 
-        Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
+        final Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
         b.setText("Start");
         b.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -196,7 +194,8 @@ public class RunWorkoutActivity extends Activity {
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                 hanging = false;
-                mProgress.setVisibility(View.INVISIBLE);
+                mProgress.setVisibility(View.GONE);
+                b.setText("Start");
             }
         });
 

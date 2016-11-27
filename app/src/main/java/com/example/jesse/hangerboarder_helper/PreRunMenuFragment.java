@@ -7,6 +7,9 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.media.RatingCompat;
+import android.support.v7.view.ContextThemeWrapper;
+import android.text.Html;
 
 /**
  * Created by Jesse on 11/5/2016.
@@ -63,8 +66,11 @@ public class PreRunMenuFragment extends DialogFragment {
         final int i = getArguments().getInt("workoutIndex");
 
         //Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(title) //R.string.dialogtitle
+        ContextThemeWrapper context = new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Dialog_NoActionBar);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogTheme);
+        //builder.setMessage(Html.fromHtml("<b>" + title + "</b>", Html.FROM_HTML_MODE_LEGACY))
+        builder.setMessage(title)
                 .setPositiveButton("RUN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
