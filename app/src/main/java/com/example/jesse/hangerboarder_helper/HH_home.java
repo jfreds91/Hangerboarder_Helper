@@ -1,8 +1,10 @@
 package com.example.jesse.hangerboarder_helper;
 
 import android.app.DialogFragment;
+//import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +43,7 @@ public class HH_home extends AppCompatActivity
 
     //Button btngenerate, btntest,
 
-    ImageButton btnaddworkout;
+    ImageButton btnaddworkout, btnInfo;
     public LinearLayout mScrollLinearView;
     TextView tvtitle;
     ArrayList<Workout_obj> allworkouts = new ArrayList<>();
@@ -54,6 +56,7 @@ public class HH_home extends AppCompatActivity
         //btngenerate = (Button) findViewById(R.id.generateWorkoutButton);
         //btntest = (Button) findViewById(R.id.testButton);
         btnaddworkout = (ImageButton) findViewById(R.id.add_workout);
+        btnInfo = (ImageButton) findViewById(R.id.infoButton);
         tvtitle = (TextView) findViewById(R.id.mainTitle);
         mScrollLinearView = (LinearLayout) findViewById(R.id.scrollLinearView);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -81,6 +84,15 @@ public class HH_home extends AppCompatActivity
             }
         };
         btnaddworkout.setOnClickListener(oclBtnAddWorkout);
+
+        //set click listener for info button
+        OnClickListener oclBtnInfo = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInfoDialog();
+            }
+        };
+        btnInfo.setOnClickListener(oclBtnInfo);
     }
 
 
@@ -234,9 +246,16 @@ public class HH_home extends AppCompatActivity
         //needs to find a way to pass its index to the dialog
         int viewIndex = mScrollLinearView.indexOfChild(v);
         String s = allworkouts.get(viewIndex).getName();
-        DialogFragment newFragment = PreRunMenuFragment.newInstance(s, viewIndex);
-        newFragment.show(getFragmentManager(), "prerun");
+        PreRunMenuFragment newFragment = PreRunMenuFragment.newInstance(s, viewIndex);
+        newFragment.show(getFragmentManager(), "prerun"); //this string is a handle for the fragment manager to utilize
     }
+
+    //called when info button clicked
+    private void showInfoDialog() {
+        InfoDialogFragment idf = InfoDialogFragment.newInstance();
+        idf.show(getFragmentManager(), "info");
+    }
+
 
 
     //The dialog fragment receives a reference to this Activity through the

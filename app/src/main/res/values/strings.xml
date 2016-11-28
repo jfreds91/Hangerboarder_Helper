@@ -25,4 +25,5 @@
         <item>RETURN</item>
     </string-array>
     <string name="title_activity_main">MainActivity</string>
+    <string name="infotext">this will eventually be a long explanation for how to properly train with hangboarding, and furthermore how to use the app (and maybe a little about the author ;) ) but for now its just this block.</string>
 </resources>

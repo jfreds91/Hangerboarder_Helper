@@ -56,7 +56,7 @@ public class PreRunMenuFragment extends DialogFragment {
         f.setArguments(args);
 
         return f;
-    };
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
