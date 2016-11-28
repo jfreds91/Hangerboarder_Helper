@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,9 @@ public class HH_home extends AppCompatActivity
     public final static String EXTRA_MESSAGE = "com.example.Hangerboarder_Helper.MESSAGE";
     static final String datafile = ".com.example.HangerBoarderHelper.serdata";
 
-    Button btngenerate, btntest, btnaddworkout;
+    //Button btngenerate, btntest,
+
+    ImageButton btnaddworkout;
     public LinearLayout mScrollLinearView;
     TextView tvtitle;
     ArrayList<Workout_obj> allworkouts = new ArrayList<>();
@@ -47,11 +51,13 @@ public class HH_home extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hh_home);
         // find view elements, so we can assign on click listeners to them later
-        btngenerate = (Button) findViewById(R.id.generateWorkoutButton);
-        btntest = (Button) findViewById(R.id.testButton);
-        btnaddworkout = (Button) findViewById(R.id.add_workout);
+        //btngenerate = (Button) findViewById(R.id.generateWorkoutButton);
+        //btntest = (Button) findViewById(R.id.testButton);
+        btnaddworkout = (ImageButton) findViewById(R.id.add_workout);
         tvtitle = (TextView) findViewById(R.id.mainTitle);
         mScrollLinearView = (LinearLayout) findViewById(R.id.scrollLinearView);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
 
         //Load Datafile
@@ -75,10 +81,10 @@ public class HH_home extends AppCompatActivity
             }
         };
         btnaddworkout.setOnClickListener(oclBtnAddWorkout);
+    }
 
 
-
-        //set click listener which initializes nworkout and adds exercises
+/*        //set click listener which initializes nworkout and adds exercises
         OnClickListener oclBtnGenerate = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +107,7 @@ public class HH_home extends AppCompatActivity
         };
         //assign click listener to button
         btngenerate.setOnClickListener(oclBtnGenerate);
-    }
+    */
 
 
     //The problem with this method of loading is that it reloads the save file right after a workout is deleted, nullifying deletion

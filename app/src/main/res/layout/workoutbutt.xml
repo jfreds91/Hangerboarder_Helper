@@ -5,10 +5,11 @@
 
     <Button
         android:id="@+id/workoutButtButt"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:width="300dp"
         android:text="N/A"
-        android:onClick="onWorkoutButtClick"/>
+        android:onClick="onWorkoutButtClick"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp" />
 
 </LinearLayout>

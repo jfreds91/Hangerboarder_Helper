@@ -6,24 +6,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     tools:context="com.example.jesse.hangerboarder_helper.HH_home">
+
+
+    <!-- android:background="?attr/colorPrimary" -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+        app:title="@string/app_name1" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#000000">
+        android:background="#000000"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_information_outline"
-            android:id="@+id/imageButton"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:hapticFeedbackEnabled="false"
+            android:background="@null" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_plus_circle_outline"
+            android:id="@+id/add_workout"
+            android:layout_weight="1"
+            android:background="@null" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_settings"
+            android:id="@+id/imageButton4"
+            android:layout_weight="1"
+            android:background="@null" />
     </LinearLayout>
 
     <TextView
@@ -57,25 +89,65 @@
         android:id="@+id/generateWorkoutButton"
         android:visibility="gone"/>
 
-    <Button
-        android:text="@string/addWorkoutName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_workout" />
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_fingerprint_background"
+        android:elevation="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/scrollLinearView">
+            android:id="@+id/scrollLinearView"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#00000000">
 
 
+            <Button
+                android:text="Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button4"
+                android:elevation="24dp" />
 
+            <Button
+                android:text="Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button5"
+                android:elevation="24dp" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
+                android:elevation="24dp" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button2"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
+                android:elevation="24dp" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button3"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
+                android:elevation="24dp" />
         </LinearLayout>
 
     </ScrollView>
+
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Hangerboarder_Helper</string>
+    <string name="app_name1">Hangboarder Helper</string>
+    <string name="app_name">Hangboarder Helper</string>
     <string name="new_workout">Created Workout</string>
     <string name="exercise_1">exercise_1</string>
     <string name="exercise_2">exercise_2</string>
