@@ -25,5 +25,20 @@
         <item>RETURN</item>
     </string-array>
     <string name="title_activity_main">MainActivity</string>
-    <string name="infotext">this will eventually be a long explanation for how to properly train with hangboarding, and furthermore how to use the app (and maybe a little about the author ;) ) but for now its just this block.</string>
+    <string name="infotext"><![CDATA[
+    <b>What is Hangboarding?</b><br/>
+Hangboarding is an effective method of rock climbing training which involves performing repeated deadhangs in particular grip configurations, for particular intervals.
+It develops isometric grip strength specific to whatever kind of holds are desired, and can be easily tailored to address a climber\'s individual weaknesses or goal routes.<br/><br/>
+<b>When should I hangboard?</b><br/>
+If you climb regularly and feel you have plateaued at a particular level of max-effort moves or sequences, hangboarding could be a great way to continue improving.
+Also, if you feel that for example your crimp strength is lagging behind your sloper strength, hangboarding is one way to specifically develop your crimp strength.<br/>
+HOWEVER, hangboarding is a high intensity exercise and it can be RISKY. It places a great deal of strain on your tendons, and you must be vigilant and careful not to
+overdo it. As a rule of thumb, you should be comfortably sending V5 before attempting to hangboard - newer climbers do not have the prerequisite tendon strength to
+safely hangboard, and would be better served to train by bouldering. That being said, a careful climber will see huge strength gains from hangboarding!<br/><br/>
+<b>How to use this app:</b><br/>
+This app is designed to help you design and follow a consistent hangboarding routine to maximize the benefit you get from training. Press the (+) button to add a workout,
+then add 6-8 exercises to it, each named as the intended grip (ex: medium crimp). Beginners should perform 10/5 repeaters, which are 10 seconds under tension and 5 seconds
+rest, repeated 6 times in 90 seconds. Your first time through the workout, you will see that you need to add or subtract weight from your bodyweight in order to complete
+each exercise - record this after each exercise, and it will be stored for next time.
+    ]]></string>
 </resources>

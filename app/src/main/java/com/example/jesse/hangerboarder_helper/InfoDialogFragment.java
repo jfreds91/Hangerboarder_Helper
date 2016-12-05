@@ -3,9 +3,14 @@ package com.example.jesse.hangerboarder_helper;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+
 
 /**
  * Created by Jesse on 11/27/2016.
@@ -34,6 +39,21 @@ public class InfoDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView infoTextview = (TextView) view.findViewById(R.id.infoTextView);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            infoTextview.setText(Html.fromHtml(this.getResources().getString(R.string.infotext),Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            infoTextview.setText(Html.fromHtml(this.getResources().getString(R.string.infotext)));
+        }
+
+        Button closeInfoButton =(Button) view.findViewById(R.id.info_ok);
+        View.OnClickListener oclCloseInfoButton = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeInfo(v);
+            }
+        };
+        closeInfoButton.setOnClickListener(oclCloseInfoButton);
 /*        // Get field from view
         mEditText = (EditText) view.findViewById(R.id.txt_your_name);
         // Fetch arguments from bundle and set title
@@ -46,5 +66,8 @@ public class InfoDialogFragment extends DialogFragment {
     */
     }
 
+    public void closeInfo(View view) {
+        this.dismiss();
+    }
 
 }
