@@ -30,6 +30,10 @@ public class RunWorkoutActivity extends Activity {
     TextView runWorkoutTitle;
     TextView lastWeightTextView;
     EditText thisWeightEditText;
+    TextView RWA_exName;
+    TextView RWA_woName;
+    TextView RWA_iteration;
+    TextView RWA_exType;
     long startTime = 0;
     long elapsedTime = 0;
     long maxTime = 90000; //Must be in milliseconds
@@ -111,8 +115,18 @@ public class RunWorkoutActivity extends Activity {
         final int totalEx = activeWorkout.size();
         String totalExS = Integer.toString(totalEx);
         String thisExS = Integer.toString(activeExNum + 1);
-        runWorkoutTitle = (TextView) findViewById(R.id.runWorkoutTitle);
-        runWorkoutTitle.setText("Exercise " + activeWorkout.get(activeExNum).getName() + ", (" + activeWorkout.get(activeExNum).getSpinnerType() + "), " + thisExS + "/" +totalExS);
+        //runWorkoutTitle = (TextView) findViewById(R.id.runWorkoutTitle);
+        //runWorkoutTitle.setText("Exercise " + activeWorkout.get(activeExNum).getName() + ", (" + activeWorkout.get(activeExNum).getSpinnerType() + "), " + thisExS + "/" +totalExS);
+        RWA_exName = (TextView) findViewById(R.id.RWA_ExerciseName);
+        RWA_woName = (TextView) findViewById(R.id.RWA_WorkoutName);
+        RWA_iteration = (TextView) findViewById(R.id.RWA_iteration);
+        RWA_exType = (TextView) findViewById(R.id.RWA_ExerciseType);
+
+        RWA_exName.setText(activeWorkout.get(activeExNum).getName());
+        RWA_woName.setText(activeWorkout.getName());
+        RWA_iteration.setText("(" + thisExS + "/" + totalExS + ")");
+        RWA_exType.setText(activeWorkout.get(activeExNum).getSpinnerType());
+
         lastWeightTextView = (TextView) findViewById(R.id.lastWeightTextView);
         lastWeightTextView.setText(Double.toString(activeWorkout.get(activeExNum).getLast()));
 
