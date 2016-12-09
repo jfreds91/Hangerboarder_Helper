@@ -34,6 +34,7 @@ public class RunWorkoutActivity extends Activity {
     TextView RWA_woName;
     TextView RWA_iteration;
     TextView RWA_exType;
+    TextView RWA_StatusTextView;
     long startTime = 0;
     long elapsedTime = 0;
     long maxTime = 90000; //Must be in milliseconds
@@ -73,6 +74,7 @@ public class RunWorkoutActivity extends Activity {
                         if (hanging == true){
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP2,1000);
+                            RWA_StatusTextView.setText("Rest");
                             hanging = false;
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
@@ -81,6 +83,7 @@ public class RunWorkoutActivity extends Activity {
                         if (hanging == false){
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP,1000);
+                            RWA_StatusTextView.setText("Hang");
                             hanging = true;
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
@@ -121,6 +124,7 @@ public class RunWorkoutActivity extends Activity {
         RWA_woName = (TextView) findViewById(R.id.RWA_WorkoutName);
         RWA_iteration = (TextView) findViewById(R.id.RWA_iteration);
         RWA_exType = (TextView) findViewById(R.id.RWA_ExerciseType);
+        RWA_StatusTextView = (TextView) findViewById(R.id.RWA_StatusTextView);
 
         RWA_exName.setText(activeWorkout.get(activeExNum).getName());
         RWA_woName.setText(activeWorkout.getName());
@@ -174,6 +178,7 @@ public class RunWorkoutActivity extends Activity {
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable,0);
                         mProgress.setVisibility(View.VISIBLE);
+                        RWA_StatusTextView.setText("Get Ready...");
                         break;
                     case Paused: //pressed button when timer was paused. should run timer
                         stateArray[0] = Timerstate.Running;
@@ -181,6 +186,11 @@ public class RunWorkoutActivity extends Activity {
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable,0);
                         mProgress.setVisibility(View.VISIBLE);
+                        if (hanging==true) {
+                            RWA_StatusTextView.setText("Hang");
+                        } else {
+                            RWA_StatusTextView.setText("Rest");
+                        }
                         break;
                     case Running: //pressed button when timer was running. should pause timer
                         stateArray[0] = Timerstate.Paused;
@@ -208,8 +218,9 @@ public class RunWorkoutActivity extends Activity {
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                 hanging = false;
-                mProgress.setVisibility(View.GONE);
+                //mProgress.setVisibility(View.GONE);
                 b.setText("Start");
+                RWA_StatusTextView.setText("Press Start To Begin");
             }
         });
 

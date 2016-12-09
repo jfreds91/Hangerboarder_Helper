@@ -18,7 +18,11 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:textSize="30sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowRadius="10"
+            android:shadowDx="10"
+            android:shadowDy="10"/>
     </LinearLayout>
 
     <ScrollView
