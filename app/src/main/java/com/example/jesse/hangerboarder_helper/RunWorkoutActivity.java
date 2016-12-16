@@ -1,17 +1,26 @@
 package com.example.jesse.hangerboarder_helper;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.InputType;
+import android.transition.Transition;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import static java.lang.StrictMath.toIntExact;
@@ -45,10 +54,14 @@ public class RunWorkoutActivity extends Activity {
     long progressAdjustedTimeOff;
     int activeExNum;
     int activeWoNum;
-    boolean hanging = false;
+    boolean hanging = true;
     enum Timerstate {Running, Stopped, Paused};
     final Timerstate[] stateArray = {Timerstate.Stopped};// = {{Timerstate.Stopped}};
     ProgressBar mProgress;
+    Drawable run_dead;
+    Drawable run_on;
+    Drawable run_off;
+    RelativeLayout RWA_mainRL;
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -70,21 +83,36 @@ public class RunWorkoutActivity extends Activity {
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 if (timeOnPerInterval != interval) {
                     if ((seconds+1) % interval > timeOnPerInterval || (seconds+1) % interval == 0) {
-                        //Climber is OFF the hangboard
+                        //Climber is getting OFF the hangboard
                         if (hanging == true){
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP2,1000);
                             RWA_StatusTextView.setText("Rest");
                             hanging = false;
+
+                            Drawable drawableFrom = RWA_mainRL.getBackground().getCurrent();
+                            Drawable drawableTo = run_off;
+                            Drawable[] tdi = {drawableFrom,drawableTo};
+                            TransitionDrawable td = new TransitionDrawable(tdi);
+                            RWA_mainRL.setBackground(td);
+                            td.startTransition(1000);
+
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOff, null));
                     } else {
-                        //Climber is ON the hangboard
+                        //Climber is getting ON the hangboard
                         if (hanging == false){
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP,1000);
                             RWA_StatusTextView.setText("Hang");
                             hanging = true;
+
+                            Drawable drawableFrom = RWA_mainRL.getBackground().getCurrent();
+                            Drawable drawableTo = run_on;
+                            Drawable[] tdi = {drawableFrom,drawableTo};
+                            TransitionDrawable td = new TransitionDrawable(tdi);
+                            RWA_mainRL.setBackground(td);
+                            td.startTransition(1000);
                         }
                         timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
                     }
@@ -133,6 +161,18 @@ public class RunWorkoutActivity extends Activity {
 
         lastWeightTextView = (TextView) findViewById(R.id.lastWeightTextView);
         lastWeightTextView.setText(Double.toString(activeWorkout.get(activeExNum).getLast()));
+
+        RWA_mainRL = (RelativeLayout) findViewById(R.id.RWA_mainRL);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            run_dead = getDrawable(R.drawable.run_dead);
+            run_on = getDrawable(R.drawable.run_on);
+            run_off = getDrawable(R.drawable.run_off);
+        } else {
+            run_dead = getResources().getDrawable(R.drawable.run_dead);
+            run_on = getResources().getDrawable(R.drawable.run_on);
+            run_off = getResources().getDrawable(R.drawable.run_off);
+        }
 
         //Initialize timer settings
         switch (activeWorkout.get(activeExNum).getSpinnerPosition()) {
@@ -217,10 +257,17 @@ public class RunWorkoutActivity extends Activity {
                 int mseconds = ((int) millis % 1000)/10;
                 timerTextView.setText(String.format("%02d:%02d:%02d", minutes, seconds, mseconds));
                 timerTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorOn, null));
-                hanging = false;
+                hanging = true;
                 //mProgress.setVisibility(View.GONE);
                 b.setText("Start");
                 RWA_StatusTextView.setText("Press Start To Begin");
+
+                Drawable drawableFrom = RWA_mainRL.getBackground().getCurrent();
+                Drawable drawableTo = run_dead;
+                Drawable[] tdi = {drawableFrom,drawableTo};
+                TransitionDrawable td = new TransitionDrawable(tdi);
+                RWA_mainRL.setBackground(td);
+                td.startTransition(1000);
             }
         });
 

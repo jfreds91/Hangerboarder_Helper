@@ -4,49 +4,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    android:background="@drawable/run_drawable">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/runWorkoutTimerText"
-        android:background="#00000000"
-        android:id="@+id/RWA_ProgressBarFrame">
-
-        <TextView
-            android:text="Press Start to Begin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/RWA_StatusTextView"
-            android:background="#00000000"
-            android:shadowColor="#ffffff"
-            android:shadowRadius="5"
-            android:textAllCaps="false"
-            android:textIsSelectable="false"
-            android:textStyle="normal|bold|italic"
-            android:layout_above="@+id/progressbar"
-            android:gravity="left"
-            android:paddingLeft="20dp"
-            android:textSize="16sp"
-            android:layout_below="@+id/runWorkoutTimerText"
-            android:elevation="1dp"
-            android:layout_marginTop="2dp" />
-
-        <ProgressBar
-            android:id="@+id/progressbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/runWorkoutTimerText"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="visible"
-            android:layout_marginBottom="10dp"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:progressDrawable="@drawable/progressbar_states"
-            android:background="#00000000"
-            android:paddingTop="15dp"
-            android:elevation="0dp" />
-    </FrameLayout>
+    android:background="@drawable/run_dead_off"
+    android:id="@+id/RWA_mainRL">
 
     <TextView
         android:id="@+id/runWorkoutTitle"
@@ -229,5 +188,50 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:id="@+id/RWA_ProgressBarFrame"
+        android:layout_below="@+id/runWorkoutTimerText"
+        android:layout_toRightOf="@+id/runWorkoutTitle"
+        android:layout_toEndOf="@+id/runWorkoutTitle">
+
+        <TextView
+            android:text="Press Start to Begin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/RWA_StatusTextView"
+            android:background="#00000000"
+            android:shadowColor="#000000"
+            android:shadowRadius="20"
+            android:textAllCaps="false"
+            android:textIsSelectable="false"
+            android:textStyle="normal|bold|italic"
+            android:layout_above="@+id/progressbar"
+            android:gravity="left"
+            android:paddingLeft="20dp"
+            android:textSize="16sp"
+            android:layout_below="@+id/runWorkoutTimerText"
+            android:elevation="1dp"
+            android:layout_marginTop="4dp" />
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/runWorkoutTimerText"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="visible"
+            android:layout_marginBottom="10dp"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:progressDrawable="@drawable/progressbar_states"
+            android:background="#00000000"
+            android:paddingTop="15dp"
+            android:elevation="0dp" />
+
+    </FrameLayout>
 
 </RelativeLayout>
