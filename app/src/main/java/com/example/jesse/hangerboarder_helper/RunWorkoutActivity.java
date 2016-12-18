@@ -87,7 +87,11 @@ public class RunWorkoutActivity extends Activity {
                         if (hanging == true){
                             ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 200);
                             toneGen1.startTone(ToneGenerator.TONE_PROP_BEEP2,1000);
-                            RWA_StatusTextView.setText("Rest");
+                            if ((System.currentTimeMillis() - startTime + elapsedTime) < 1000) {
+                                RWA_StatusTextView.setText("Get Ready");
+                            } else{
+                                RWA_StatusTextView.setText("Rest");
+                            }
                             hanging = false;
 
                             Drawable drawableFrom = RWA_mainRL.getBackground().getCurrent();
@@ -268,6 +272,8 @@ public class RunWorkoutActivity extends Activity {
                 TransitionDrawable td = new TransitionDrawable(tdi);
                 RWA_mainRL.setBackground(td);
                 td.startTransition(1000);
+
+                mProgress.setProgress(0);
             }
         });
 
@@ -305,6 +311,7 @@ public class RunWorkoutActivity extends Activity {
         stateArray[0] = Timerstate.Stopped;
         timerHandler.removeCallbacks(timerRunnable);
         Button b = (Button) findViewById(R.id.runWorkoutStartPauseButton);
+        mProgress.setProgress(0);
         b.setText("Stopped");
     }
 

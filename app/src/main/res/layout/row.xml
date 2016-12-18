@@ -2,7 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="@drawable/rect2"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="0dp">
 
     <EditText
         android:id="@+id/editText"
@@ -19,7 +24,7 @@
     <Spinner
         android:id="@+id/spinnerCategory"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.15"
 
         android:gravity="right" />
