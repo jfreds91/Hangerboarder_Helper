@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -47,7 +48,6 @@ public class CreateWorkoutActivity_V2 extends Activity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.row_container);
-
         mContainerView = (RelativeLayout) findViewById(R.id.parentView);
         mScrollLinearView_Create = (LinearLayout) findViewById(R.id.scrollLinearView_create);
         mAddButton = (Button) findViewById(R.id.btnAddNewItem);
@@ -55,37 +55,46 @@ public class CreateWorkoutActivity_V2 extends Activity{
         btnCreateWorkout = (Button) findViewById(R.id.createWorkoutButton);
         editTextWorkoutName = (EditText) findViewById(R.id.workoutName);
 
-        //Try to get workout viewindex from intent. If it defaults, run normally. Otherwise, load workout
-        Intent intent = this.getIntent();
-        viewIndex = intent.getIntExtra(WO_KEY, viewIndex);
-        if (viewIndex != -1) {
-            newWorkout = (Workout_obj) intent.getSerializableExtra(SER_KEY);
-            editTextWorkoutName.setText(newWorkout.getName());
-            for (int i=0; i < newWorkout.size(); i++) {
-                inflateEditRow(newWorkout.get(i));
-            }
-            //make delete button visible
-            findViewById(R.id.deleteWorkoutButton).setVisibility(View.VISIBLE);
+        if (savedInstanceState != null) {
+            //don't do anything, this is handled by onRestoreInstanceState
         } else {
-            // Add some examples
-            inflateEditRow(null);
+            //Try to get workout viewindex from intent. If it defaults, run normally. Otherwise, load workout
+            Intent intent = this.getIntent();
+            viewIndex = intent.getIntExtra(WO_KEY, viewIndex);
+            if (viewIndex != -1) {
+                newWorkout = (Workout_obj) intent.getSerializableExtra(SER_KEY);
+                editTextWorkoutName.setText(newWorkout.getName());
+                for (int i = 0; i < newWorkout.size(); i++) {
+                    inflateEditRow(newWorkout.get(i));
+                }
+                //make delete button visible
+                findViewById(R.id.deleteWorkoutButton).setVisibility(View.VISIBLE);
+            } else {
+                // Add some examples
+                inflateEditRow(null);
+            }
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-
-        // TODO: Handle screen rotation:
-        // encapsulate information in a parcelable object, and save it
-        // into the state bundle.
+        // encapsulate information in a parcelable object, and save it into the state bundle.
+        encapsulateInput(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        // TODO: Handle screen rotation:
-        // restore the saved items and inflate each one with inflateEditRow;
+        // Restore value of members from saved state
+        newWorkout = (Workout_obj) savedInstanceState.getSerializable(SER_KEY);
+        viewIndex = savedInstanceState.getInt(WO_KEY, viewIndex);
+        editTextWorkoutName.setText(newWorkout.getName());
+        for (int i=0; i < newWorkout.size(); i++) {
+            inflateEditRow(newWorkout.get(i));
+        }
+        if (viewIndex!=-1) {
+            findViewById(R.id.deleteWorkoutButton).setVisibility(View.VISIBLE);
+        }
     }
 
     //onClick handler for the "Add New" button
@@ -118,7 +127,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.row, mContainerView, false);
         final ImageButton deleteButton = (ImageButton) rowView.findViewById(R.id.buttonDelete);
-        final EditText editText = (EditText) rowView.findViewById(R.id.editText);
+        EditText editText = (EditText) rowView.findViewById(R.id.editText);
         final Spinner spinner = (Spinner) rowView.findViewById(R.id.spinnerCategory);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -177,20 +186,40 @@ public class CreateWorkoutActivity_V2 extends Activity{
     }
 
     public void saveAndReturn() {
-    //Assign workout name and exercises, make sure at least one exercise
+        // verify that workout has at least one exercise in it????
+        Bundle bundle = new Bundle();
+        encapsulateInput(bundle);
+        //if (newWorkout.size() == 0) {catitle.setText("need at least one exercise"); return; }
 
+        //Attach workout object to intent
+        Intent returnIntent = new Intent();
+        //Bundle bundle = new Bundle();
+        bundle.putSerializable(SER_KEY, newWorkout);
+        returnIntent.putExtras(bundle);
+        if (viewIndex == -1) { //new workout case
+            setResult(Activity.RESULT_OK,returnIntent);
+            finish();
+        } else { //edit workout case
+            returnIntent.putExtra(WO_KEY, viewIndex);
+            setResult(Activity.RESULT_OK,returnIntent);
+            finish();
+        }
+    }
+
+    public Bundle encapsulateInput(Bundle bundle) {
+        //TODO Add a way to get the viewindex back as well
+        //assign all values to a new Workout_obj
         String newName = editTextWorkoutName.getHint().toString(); //default if name field is blank
         if (!editTextWorkoutName.getText().toString().equals("")) {
             newName = editTextWorkoutName.getText().toString();
         }
-
-        if (viewIndex == -1) {
+        if (viewIndex == -1) { //meaning this workout does not exist
             newWorkout = new Workout_obj(newName);
         } else {
             newWorkout.setName(newName);
-            newWorkout.clear(); //THIS WILL REMOVE ALL EXERCISE WEIGHT HISTORY, MAY NEED TO REMOVE LATER
+            newWorkout.clear(); //clearing this because otherwise it adds duplicates of each exercise in the workout. an unintended sideffect is that it deletes weight history
         }
-
+        //generate temporary exercise, use it to save user input into newWorkout via loop
         Exercise_obj tempEx;
         Integer n = new Integer(mScrollLinearView_Create.getChildCount());
         for (int i = 0; i < n; i++) {
@@ -207,24 +236,12 @@ public class CreateWorkoutActivity_V2 extends Activity{
             }
         }
 
-        //make sure at least one workout
-        if (newWorkout.size() == 0) {catitle.setText("need at least one exercise"); return; }
-
-        //Attach workout object to intent
-        Intent returnIntent = new Intent();
-        Bundle bundle = new Bundle();
         bundle.putSerializable(SER_KEY, newWorkout);
-        returnIntent.putExtras(bundle);
-        if (viewIndex == -1) { //new workout case
-            setResult(Activity.RESULT_OK,returnIntent);
-            finish();
-        } else { //edit workout case
-            returnIntent.putExtra(WO_KEY, viewIndex);
-            setResult(Activity.RESULT_OK,returnIntent);
-            finish();
-        }
+        bundle.putInt(WO_KEY, viewIndex);
+        return bundle;
+    };
 
-    }
+
 
     public void deleteAndReturn() {
         newWorkout.clearAll();
@@ -238,4 +255,5 @@ public class CreateWorkoutActivity_V2 extends Activity{
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
+
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -27,7 +28,11 @@
         android:layout_height="match_parent"
         android:layout_weight="0.15"
 
-        android:gravity="right" />
+        android:gravity="right"
+        android:dropDownSelector="@android:drawable/ic_menu_more"
+        android:clickable="true"
+        android:popupBackground="@android:drawable/dialog_holo_light_frame"
+        android:popupElevation="0dp" />
 
     <ImageButton
         android:id="@+id/buttonDelete"
