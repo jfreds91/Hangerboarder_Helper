@@ -79,12 +79,13 @@ public class CreateWorkoutActivity_V2 extends Activity{
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        // encapsulate information in a parcelable object, and save it into the state bundle.
+        // encapsulate information in a serializable object, and save it into the state bundle.
         encapsulateInput(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
         // Restore value of members from saved state
         newWorkout = (Workout_obj) savedInstanceState.getSerializable(SER_KEY);
         viewIndex = savedInstanceState.getInt(WO_KEY, viewIndex);
@@ -207,7 +208,7 @@ public class CreateWorkoutActivity_V2 extends Activity{
     }
 
     public Bundle encapsulateInput(Bundle bundle) {
-        //TODO Add a way to get the viewindex back as well
+
         //assign all values to a new Workout_obj
         String newName = editTextWorkoutName.getHint().toString(); //default if name field is blank
         if (!editTextWorkoutName.getText().toString().equals("")) {

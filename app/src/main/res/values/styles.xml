@@ -15,7 +15,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:background">@color/colorBackground</item>
+        <!--<item name="android:background">@color/colorBackground</item>-->
     </style>
 
     <style name="MyTextViewStyle" parent="android:Widget.TextView">
@@ -47,6 +47,7 @@
     </style>
     <style name="SpinnerItem.DropDownItem" parent="@android:style/Widget.DropDownItem.Spinner">
         <item name="android:textColor">#eaeaea</item>
+        <item name="android:background">@color/colorBackground</item>
     </style>
     <style name="mySpinnerDropDownStyle" parent="android:Widget.ListView.DropDown">
         <item name="android:divider">#eaeaea</item>
